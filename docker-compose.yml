@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Nginx 리버스 프록시
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx-proxy-https
+    ports:
+      - "80:80"     # HTTP -> HTTPS 리다이렉션
+      - "443:443"   # HTTPS 메인 포트
+    volumes:
+      # 인증서 파일을 호스트에서 Nginx 컨테이너로 마운트
+      - ./src/main/resources/certs:/etc/nginx/certs:ro
+      # Nginx 로그 (옵션)
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - spring-app
+    networks:
+      - nginx-network
+    restart: unless-stopped
+    # Nginx 헬스체크
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  # Spring Boot 애플리케이션
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: spring-boot-app
+    # 포트를 외부에 노출하지 않음 (Nginx를 통해서만 접근)
+    environment:
+      # Spring Boot 설정
+      - SPRING_PROFILES_ACTIVE=nginx
+      # 프록시 환경 설정
+      - SERVER_FORWARD_HEADERS_STRATEGY=framework
+      # 로깅 설정
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_WEB=INFO
+      # JVM 메모리 설정
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    volumes:
+      # 로그 디렉토리 마운트 (옵션)
+      - ./logs/spring:/app/logs
+    networks:
+      - nginx-network
+    restart: unless-stopped
+    # Spring Boot 헬스체크
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  nginx-network:
+    driver: bridge
+    name: nginx-spring-network
+
+volumes:
+  # 로그 데이터 영속화 (옵션)
+  nginx-logs:
+    driver: local
+  spring-logs:
+    driver: local

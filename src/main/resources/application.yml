@@ -6,6 +6,15 @@ spring:
 
 server:
   port: 8080
+    # 프록시 환경에서 실제 클라이언트 정보 인식을 위한 설정
+    # Nginx가 전달하는 X-Forwarded-* 헤더들을 Spring Boot가 인식하도록 활성화
+    # - X-Forwarded-For: 실제 클라이언트 IP 주소 (Nginx IP가 아닌)
+    # - X-Forwarded-Proto: 원본 프로토콜 (https/http)
+    # - X-Forwarded-Host: 원본 호스트명
+    # - X-Forwarded-Port: 원본 포트번호
+    # 이 설정이 없으면 Spring Boot는 모든 요청을 Nginx에서 온 것으로 인식하여
+    # 실제 클라이언트 정보를 파악할 수 없고, 로깅이나 보안 검증에 문제가 발생
+  forward-headers-strategy: framework
 
 management:
   endpoints:

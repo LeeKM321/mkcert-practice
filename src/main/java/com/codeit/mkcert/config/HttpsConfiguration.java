@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("dev")
+@Profile("!nginx") // nginx 프로필이 아닐 때만 활성화
 public class HttpsConfiguration {
 
     @Bean

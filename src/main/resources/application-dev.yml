@@ -1,15 +1,11 @@
 server:
   port: 8443
-  ssl:
-    enabled: true
-    certificate: classpath:certs/localhost.crt
-    certificate-private-key: classpath:certs/localhost.key
-    protocol: TLS
-    enabled-protocols: TLSv1.2,TLSv1.3
+  # SSL 설정 모두 제거 - Nginx에서 처리할 것이기 때문
 
   # HTTP 포트 설정 (추가 커넥터에서 사용)
   http:
     port: 8080
+  forward-headers-strategy: framework
 
 # Management 엔드포인트는 메인 서버와 같은 포트 사용
 management:
