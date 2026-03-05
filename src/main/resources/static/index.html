@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mkcert HTTPS 로컬 개발 환경</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Spring Boot mkcert HTTPS 실습</h1>
+            <div class="status-indicator" id="connectionStatus">
+                <span class="indicator"></span>
+                <span class="text">연결 확인 중...</span>
+            </div>
+        </header>
+        
+        <main>
+            <section class="ssl-info">
+                <h2>SSL 연결 정보</h2>
+                <div class="info-grid" id="sslInfoGrid">
+                    <div class="info-card">
+                        <h3>프로토콜</h3>
+                        <p id="protocol">확인 중...</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>포트</h3>
+                        <p id="port">확인 중...</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>보안 연결</h3>
+                        <p id="secure">확인 중...</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>요청 URL</h3>
+                        <p id="requestUrl">확인 중...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="certificate-info">
+                <h2>인증서 정보</h2>
+                <div class="cert-details" id="certDetails">
+                    <p>브라우저 개발자 도구의 Security 탭에서 인증서 세부정보를 확인할 수 있습니다.</p>
+                    <div class="cert-info-grid">
+                        <div class="cert-item">
+                            <strong>발급자:</strong> mkcert development CA
+                        </div>
+                        <div class="cert-item">
+                            <strong>주체:</strong> localhost
+                        </div>
+                        <div class="cert-item">
+                            <strong>유효성:</strong> 개발 환경용
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="test-section">
+                <h2>HTTPS 테스트</h2>
+                <div class="test-buttons">
+                    <button onclick="testHttpConnection()">HTTP 연결 테스트</button>
+                    <button onclick="testHttpsConnection()">HTTPS 연결 테스트</button>
+                    <button onclick="checkSecurityHeaders()">보안 헤더 확인</button>
+                    <button onclick="checkHealthStatus()">Health Check</button>
+                </div>
+                <div class="test-results" id="testResults">
+                    <p>테스트 버튼을 클릭하여 연결 상태를 확인하세요.</p>
+                </div>
+            </section>
+            
+            <section class="security-headers">
+                <h2>보안 헤더 상태</h2>
+                <div class="headers-grid" id="headersGrid">
+                    <div class="header-item">
+                        <h4>HSTS 활성화</h4>
+                        <p id="hstsStatus">확인 중...</p>
+                    </div>
+                    <div class="header-item">
+                        <h4>보안 쿠키</h4>
+                        <p id="secureStatus">확인 중...</p>
+                    </div>
+                    <div class="header-item">
+                        <h4>XSS Protection</h4>
+                        <p id="xssStatus">확인 중...</p>
+                    </div>
+                    <div class="header-item">
+                        <h4>Content Type Options</h4>
+                        <p id="contentTypeStatus">확인 중...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Spring Boot mkcert HTTPS 로컬 개발 환경 실습 프로젝트</p>
+            <p>개발자 도구 Network 탭에서 요청/응답 헤더를 확인해보세요.</p>
+        </footer>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

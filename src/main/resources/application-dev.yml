@@ -1,0 +1,33 @@
+server:
+  port: 8443
+  ssl:
+    enabled: true
+    certificate: classpath:certs/localhost.crt
+    certificate-private-key: classpath:certs/localhost.key
+    protocol: TLS
+    enabled-protocols: TLSv1.2,TLSv1.3
+
+  # HTTP 포트 설정 (추가 커넥터에서 사용)
+  http:
+    port: 8080
+
+# Management 엔드포인트는 메인 서버와 같은 포트 사용
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+# 보안 관련 설정
+security:
+  headers:
+    hsts:
+      enabled: true
+      max-age: 31536000
+      include-subdomains: true
+
+# 추가 SSL 디버깅
+logging:
+  level:
+    org.apache.coyote.http11: DEBUG
+    org.apache.tomcat.util.net: DEBUG
